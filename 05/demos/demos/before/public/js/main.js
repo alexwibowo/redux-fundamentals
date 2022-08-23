@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 
-import Conversion from './components/conversion.js';
+import Conversion from './containers/Conversion.js';
 import store from './stores/configureStore'; 
 
 
