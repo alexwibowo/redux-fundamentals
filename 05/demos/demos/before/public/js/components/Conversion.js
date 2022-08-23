@@ -2,6 +2,27 @@ import React from 'react';
 import PropTypes from 'prop-types'
 import axios from 'axios';
 import debounce from 'lodash.debounce';
+import { createStore } from 'redux';
+
+var defaultState = 0;
+
+function amount(state = defaultState, action){
+    switch(action.type){
+        case 'CHANGE_DEFAULT_STATE':
+            return state + 1;
+        default:
+            return state;
+    }
+    
+}
+
+var store = createStore(amount);
+store.subscribe(function(){
+    console.log("updated" , store.getState());
+});
+store.dispatch({
+    type:'CHANGE_DEFAULT_STATE'
+});
 
 class FeesTable extends React.Component {
     render() {
