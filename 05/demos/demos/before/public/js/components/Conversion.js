@@ -3,25 +3,8 @@ import PropTypes from 'prop-types'
 import axios from 'axios';
 import debounce from 'lodash.debounce';
 import { createStore } from 'redux';
+import store from '../stores/configureStore'
 
-var defaultState = {
-    originAmount: '0.00'
-};
-
-function amount(state = defaultState, action){
-    switch(action.type){
-        case 'CHANGE_ORIGIN_AMOUNT':
-            return {
-                ...state,
-                originAmount: action.data
-            };
-        default:
-            return state;
-    }
-    
-}
-
-var store = createStore(amount);
 store.subscribe(function(){
     console.log("updated" , store.getState());
 });
