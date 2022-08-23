@@ -51,14 +51,12 @@ class Conversion extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            originAmount: '0.00',
             originCurrency: 'USD',
             destinationAmount: '0.00',
             destinationCurrency: 'EUR',
             feeAmount: 0.00,
             conversionRate: 1.5,
-            totalCost: 0.00,
-            errorMsg: ''
+            totalCost: 0.00, 
         }
 
         // bind event listeners so 'this' will be available in the handlers
@@ -147,7 +145,10 @@ class Conversion extends React.Component {
         newAmount = newAmount.replace(',','')
 
         // optimistic field updates
-        this.setState({originAmount: newAmount});
+        store.dispatch({
+            type:'CHANGE_ORIGIN_AMOUNT',
+            data: {newAmount}
+        });        
 
         // get the new dest amount
         this.makeConversionAjaxCall({
@@ -222,7 +223,7 @@ class Conversion extends React.Component {
         var destCurrency = this.state.destinationCurrency;
 
         var payload = {
-            originAmount: data.newValue || this.state.originAmount,
+            originAmount: data.newValue || this.props.originAmount,
             destAmount: data.newValue || this.state.destAmount,
             originCurrency: originCurrency,
             destCurrency: destCurrency,
@@ -256,7 +257,7 @@ class Conversion extends React.Component {
         .catch(failureCallback);
     }
     calcNewTotal() {
-        var newTotal = parseFloat(this.state.originAmount, 10) + parseFloat(this.state.feeAmount, 10);
+        var newTotal = parseFloat(this.props.originAmount, 10) + parseFloat(this.state.feeAmount, 10);
         this.setState({ totalCost: parseFloat(newTotal) });
     }
 
@@ -270,7 +271,7 @@ class Conversion extends React.Component {
             <div>
                 {errorMsg}
                 <label>Convert</label>&nbsp;
-                <input className="amount-field" ref={input => this.originAmountInput = input} onChange={this.handleOriginAmountChange} value={this.state.originAmount} />
+                <input className="amount-field" ref={input => this.originAmountInput = input} onChange={this.handleOriginAmountChange} value={this.props.originAmount} />
                 <select value={this.state.originCurrency} onChange={this.handleOriginCurrencyChange}>
                     <option value="USD">USD</option>
                     <option value="EUR">EUR</option>

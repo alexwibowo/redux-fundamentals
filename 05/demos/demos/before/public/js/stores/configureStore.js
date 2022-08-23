@@ -10,7 +10,7 @@ function amount(state = defaultState, action){
         case 'CHANGE_ORIGIN_AMOUNT':
             return {
                 ...state,
-                originAmount: action.data
+                originAmount: action.data.newAmount
             };
         default:
             return state;
