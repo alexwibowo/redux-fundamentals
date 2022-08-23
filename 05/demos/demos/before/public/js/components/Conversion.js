@@ -3,15 +3,15 @@ import PropTypes from 'prop-types'
 import axios from 'axios';
 import debounce from 'lodash.debounce';
 import { createStore } from 'redux';
-import store from '../stores/configureStore'
+import { connect } from 'react-redux';
 
-store.subscribe(function(){
-    console.log("updated" , store.getState());
-});
-store.dispatch({
-    type:'CHANGE_ORIGIN_AMOUNT',
-    data: '300'
-});
+// store.subscribe(function(){
+//     console.log("updated" , store.getState());
+// });
+// store.dispatch({
+//     type:'CHANGE_ORIGIN_AMOUNT',
+//     data: '300'
+// });
 
 class FeesTable extends React.Component {
     render() {
@@ -145,7 +145,7 @@ class Conversion extends React.Component {
         newAmount = newAmount.replace(',','')
 
         // optimistic field updates
-        store.dispatch({
+        this.props.dispatch({
             type:'CHANGE_ORIGIN_AMOUNT',
             data: {newAmount}
         });        
@@ -266,6 +266,8 @@ class Conversion extends React.Component {
             var errorMsg = <div className="errorMsg">{this.state.errorMsg}</div>
         }
 
+        console.log("Conversion: this.props ", this.props);
+
 
         return (
             <div>
@@ -298,4 +300,10 @@ class Conversion extends React.Component {
     }
 }
 
-export default Conversion;
+export default connect(function mapStateToProps(state, props){
+    console.log("state ", state);
+    console.log("props ", props);
+    return {
+        originAmount: state.originAmount
+    }
+})(Conversion);
