@@ -4,12 +4,17 @@ import axios from 'axios';
 import debounce from 'lodash.debounce';
 import { createStore } from 'redux';
 
-var defaultState = 0;
+var defaultState = {
+    originAmount: '0.00'
+};
 
 function amount(state = defaultState, action){
     switch(action.type){
-        case 'CHANGE_DEFAULT_STATE':
-            return state + 1;
+        case 'CHANGE_ORIGIN_AMOUNT':
+            return {
+                ...state,
+                originAmount: action.data
+            };
         default:
             return state;
     }
@@ -21,7 +26,8 @@ store.subscribe(function(){
     console.log("updated" , store.getState());
 });
 store.dispatch({
-    type:'CHANGE_DEFAULT_STATE'
+    type:'CHANGE_ORIGIN_AMOUNT',
+    data: '300'
 });
 
 class FeesTable extends React.Component {
