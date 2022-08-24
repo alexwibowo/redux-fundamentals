@@ -11,10 +11,10 @@ class Conversion extends React.Component {
         this.state = {
             // originAmount: '0.00',
             originCurrency: 'USD',
-            destinationAmount: '0.00',
+          //  destinationAmount: '0.00',
             destinationCurrency: 'EUR',
             feeAmount: 0.00,
-            conversionRate: 1.5,
+           // conversionRate: 1.5,
             totalCost: 0.00,
             errorMsg: ''
         }
@@ -108,19 +108,32 @@ class Conversion extends React.Component {
         this.props.dispatch({type:"CHANGE_ORIGIN_AMOUNT", data:{newAmount: newAmount} });
         // this.setState({originAmount: newAmount});
 
+        // this.props.dispatch(function(dispatch) {
+        //     dispatch({type: "SOME_ACTION", data: "someData"});
+
+        //     // simulate asynchronous
+        //     setTimeout(function(){
+        //         dispatch({type: "CHANGE_ORIGIN_AMOUNT", data: { newAmount: "5000"} });
+        //     }, 3000);
+        // });
+
         // get the new dest amount
-        this.makeConversionAjaxCall({
-            currentlyEditing: 'origin',
-            newValue: newAmount
 
-        }, (resp) => {
-            this.clearErrorMessage();
+        this.props.dispatch(dispatch => {
+            var payload = {
+                currentlyEditing: 'origin',
+                newValue: newAmount
+            };
+    
+            dispatch({type: "REQUEST_CONVERSION_RATE", data: payload});
+            this.makeConversionAjaxCall(payload, (resp) => {
+                this.clearErrorMessage();
 
-            this.setState({
-                conversionRate: resp.xRate,
-                destinationAmount: resp.destAmount
-            })
-        }, this.handleAjaxFailure);
+                dispatch({type: "RECEIVED_CONVERSION_RATE", data: resp});
+    
+            }, this.handleAjaxFailure);
+        });
+      
 
         // get the new fee & total amount
         this.makeFeeAjaxCall({
@@ -234,7 +247,7 @@ class Conversion extends React.Component {
                     <option value="EUR">EUR</option>
                     <option value="JPY">JPY</option>
                 </select>
-                to <input className="amount-field" onChange={this.handleDestAmountChange} value={this.state.destinationAmount} />&nbsp;
+                to <input className="amount-field" onChange={this.handleDestAmountChange} value={this.props.destinationAmount} />&nbsp;
                 <select value={this.state.destinationCurrency} onChange={this.handleDestCurrencyChange}>
                     <option value="USD">USD</option>
                     <option value="EUR">EUR</option>
@@ -246,7 +259,7 @@ class Conversion extends React.Component {
                 <FeesTable
                     originCurrency={this.state.originCurrency}
                     destinationCurrency={this.state.destinationCurrency}
-                    conversionRate={this.state.conversionRate}
+                    conversionRate={this.props.conversionRate}
                     fee={this.state.feeAmount}
                     total={this.state.totalCost}
                 />
@@ -256,8 +269,11 @@ class Conversion extends React.Component {
 }
 
 export default connect((state, props) => {
+    // copy the properties from state, and passing it as props for the component
     return {
-        originAmount: state.originAmount
+        originAmount: state.originAmount,
+        conversionRate: state.conversionRate,
+        destinationAmount: state.destinationAmount
     }
 
 })(Conversion);
