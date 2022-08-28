@@ -14,6 +14,25 @@ export function fetchConversionRate(payload){
     };
 }
 
+export function fetchFee(payload){
+    return (dispatch) => {
+        makeFetchFee(payload, dispatch);        
+    };
+}
+
+function _makeFetchFee(payload, dispatch){
+    dispatch({type: "REQUEST_FEES", data: payload});
+    axios.get('/api/fees', {
+        params: payload
+    })
+    .then((resp) => {
+        dispatch({type: "RECEIVED_FEES_SUCCESS", data: resp.data});         
+    })
+    .catch(error => {
+        dispatch({type: "RECEIVED_FEES_FAILURE", data: error});
+    });
+}
+
 
 function _makeConversionAjaxCall(payload, dispatch){
     dispatch({type: "REQUEST_CONVERSION_RATE", data: payload});
@@ -31,3 +50,4 @@ function _makeConversionAjaxCall(payload, dispatch){
 
 // debouncing _makeConversionAjaxCall to avoid UI making lots of call to backend
 var makeConversionAjaxCall = debounce(_makeConversionAjaxCall, 300);
+var makeFetchFee = debounce(_makeFetchFee, 300);

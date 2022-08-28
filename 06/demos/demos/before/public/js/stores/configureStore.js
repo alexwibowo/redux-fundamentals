@@ -5,7 +5,9 @@ import thunk from 'redux-thunk'
 var defaultState = {
     originAmount: '0.00',
     destinationAmount: '0.00',
-    conversionRate: 1.5
+    conversionRate: 1.5,
+             feeAmount: 0.00,
+             totalCost: 0.00
 };
 
 
@@ -27,7 +29,19 @@ function amount(state = defaultState, action) {
             conversionRate: action.data.xRate,
             destinationAmount: action.data.destAmount
         }
+    } else if (action.type === "RECEIVED_FEES_SUCCESS"){
+        const newFeeAmount = action.data.feeAmount;
+        const newTotal = parseFloat(state.originAmount, 10) + parseFloat(newFeeAmount, 10);
+        return {
+            ...state,
+            feeAmount: newFeeAmount,
+            totalCost: newTotal
+        }
+        // this.calcNewTotal();
     }
+
+
+
     return state;
 }
 
