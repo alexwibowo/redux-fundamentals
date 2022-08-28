@@ -208,6 +208,7 @@ class Conversion extends React.Component {
     }
 
     render() {
+
         if (this.state.errorMsg) {
             var errorMsg = <div className="errorMsg">{this.state.errorMsg}</div>
         }
@@ -244,12 +245,13 @@ class Conversion extends React.Component {
 }
 
 export default connect((state, props) => {
+    console.log(state)
     return {
-        originAmount: state.originAmount,
-        destinationAmount: state.destinationAmount,
-        conversionRate: state.conversionRate,
-        feeAmount: state.feeAmount,
-        totalCost: state.totalCost
+        originAmount: state.amount.originAmount,
+        destinationAmount: state.amount.destinationAmount,
+        conversionRate: state.amount.conversionRate,
+        feeAmount: state.amount.feeAmount,
+        totalCost: state.amount.totalCost
     }
 
 })(Conversion);
