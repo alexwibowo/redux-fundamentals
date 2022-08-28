@@ -1,9 +1,10 @@
 import axios from 'axios';
 import debounce from 'lodash.debounce';
+import { ActionTypes as types} from '../constants';
 
 export function changeOriginAmount(newAmount){
     return {
-        type:"CHANGE_ORIGIN_AMOUNT", 
+        type: types.CHANGE_ORIGIN_AMOUNT, 
         data:{newAmount: newAmount} 
     };
 }
