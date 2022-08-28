@@ -36,26 +36,7 @@ class Conversion extends React.Component {
 
         this.originAmountInput.focus();
     }
-    // we'll handle all failures the same
-    handleAjaxFailure(resp) {
-        var msg = 'Error. Please try again later.'
 
-        if (resp && resp.request && resp.request.status === 0) {
-            msg = 'Oh no! App appears to be offline.'
-        }
-
-        this.setState({
-            errorMsg: msg
-        })
-    }
-    // on success ensure no error message
-    clearErrorMessage() {
-        if (this.state.errorMsg) {
-            this.setState({
-                errorMsg: ''
-            })
-        }
-    }
 
     handleOriginCurrencyChange(event){
         const newCurrency = event.target.value;

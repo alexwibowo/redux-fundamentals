@@ -103,10 +103,36 @@ function _makeFeeAjaxCall(payload, dispatch) {
   .then((resp) => {
     dispatch({type:"RECEIVED_FEES_SUCCESS", data: resp.data});
   })
-  .catch((err) => {
-    dispatch({type:"RECEIVED_FEES_FAILURE", data: err});
+  .catch((resp) => {
+    var msg = getErrorMsg(resp);
+    dispatch({type:"RECEIVED_[AJAX_CALL]_FAILURE", data: {msg: msg, failedCall: 'fees'}});
   });
 }
 
 var makeFeeAjaxCall = debounce(_makeFeeAjaxCall, 300);
 
+/**************
+ * HELPERS
+ ************/
+
+    // we'll handle all failures the same
+function getErrorMsg(resp) {
+      var msg = 'Error. Please try again later.'
+
+      if (resp && resp.request && resp.request.status === 0) {
+          msg = 'Oh no! App appears to be offline.'
+      }
+
+      return msg;
+      // this.setState({
+      //     errorMsg: msg
+      // })
+  }
+  // on success ensure no error message
+// function clearErrorMessage() {
+//       if (this.state.errorMsg) {
+//           this.setState({
+//               errorMsg: ''
+//           })
+//       }
+//   }
