@@ -21,6 +21,12 @@ function amount(state = defaultState, action) {
             conversionRate: action.data.xRate,
             destinationAmount: action.data.destAmount
         }
+    } else if (action.type === 'RECEIVED_CONVERSION_RATE_SUCCESS'){
+        return {
+            ...state,
+            conversionRate: action.data.xRate,
+            destinationAmount: action.data.destAmount
+        }
     }
     return state;
 }

@@ -107,6 +107,14 @@ class Conversion extends React.Component {
 
         // optimistic field updates
         this.props.dispatch(actions.changeOriginAmount(newAmount));
+        var payload = {
+            originAmount: newAmount,
+            originCurrency: this.state.originCurrency,
+            destCurrency: this.state.destinationCurrency,
+            calcOriginAmount: false
+        }
+
+        this.props.dispatch(actions.fetchConversionRate(payload));
         // this.setState({originAmount: newAmount});
 
         // this.props.dispatch(function(dispatch) {
@@ -120,20 +128,15 @@ class Conversion extends React.Component {
 
         // get the new dest amount
 
-        this.props.dispatch(dispatch => {
-            var payload = {
-                currentlyEditing: 'origin',
-                newValue: newAmount
-            };
-    
-            dispatch({type: "REQUEST_CONVERSION_RATE", data: payload});
-            this.makeConversionAjaxCall(payload, (resp) => {
-                this.clearErrorMessage();
+        // this.props.dispatch(dispatch => {
+        //     dispatch({type: "REQUEST_CONVERSION_RATE", data: payload});
+        //     this.makeConversionAjaxCall(payload, (resp) => {
+        //         this.clearErrorMessage();
 
-                dispatch({type: "RECEIVED_CONVERSION_RATE", data: resp});
+        //         dispatch({type: "RECEIVED_CONVERSION_RATE", data: resp});
     
-            }, this.handleAjaxFailure);
-        });
+        //     }, this.handleAjaxFailure);
+        // });
       
 
         // get the new fee & total amount
