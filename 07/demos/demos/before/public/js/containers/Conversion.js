@@ -189,55 +189,9 @@ class Conversion extends React.Component {
         }
 
         this.props.dispatch(actions.fetchConversionRateAndFees(payload));
-
-        // var feePayload = {
-        //     originAmount: newAmount,
-        //     originCurrency: this.props.originCurrency,
-        //     destCurrency: this.props.destinationCurrency
-        // }
-
-        // this.props.dispatch(actions.fetchFees(feePayload));
-
     }
 
-
-    handleDestAmount2Change(event) {
-        var newAmount = event.target.value;
-
-        // remove unallowed chars
-        newAmount = newAmount.replace(',','')
-        // optimistic update
-        this.setState({destinationAmount: newAmount})
-
-        this.makeConversionAjaxCall({
-            currentlyEditing: 'dest',
-            newValue: newAmount
-
-        }, (resp) => {
-            // make ajax call to get the fee amount..
-            var newState = {
-                conversionRate: resp.xRate,
-                originAmount: resp.originAmount
-            }
-
-            this.setState(newState)
-
-            // get the new fee & total amount
-            this.makeFeeAjaxCall({
-                originAmount: resp.originAmount,
-                originCurrency: this.props.originCurrency,
-                destCurrency: this.props.destinationCurrency
-
-            }, (resp) => {
-                this.setState({
-                    feeAmount: resp.feeAmount
-                })
-
-                this.calcNewTotal();
-            }, this.handleAjaxFailure);
-        })
-
-    }
+   
     // this is debounced in `componentDidMount()` as this.makeConversionAjaxCall()
     _makeConversionAjaxCall(data, successCallback, failureCallback) {
         var originCurrency = this.props.originCurrency;
