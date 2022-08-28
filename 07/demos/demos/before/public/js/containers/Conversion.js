@@ -16,8 +16,8 @@ class Conversion extends React.Component {
             // destinationCurrency: 'EUR',
             feeAmount: 0.00,
             // conversionRate: 1.5,
-            totalCost: 0.00,
-            errorMsg: ''
+            totalCost: 0.00
+          //  errorMsg: ''
         }
 
         // bind event listeners so 'this' will be available in the handlers
@@ -25,7 +25,7 @@ class Conversion extends React.Component {
         this.handleDestAmountChange = this.handleDestAmountChange.bind(this);
         this.handleOriginCurrencyChange = this.handleOriginCurrencyChange.bind(this);
         this.handleDestCurrencyChange = this.handleDestCurrencyChange.bind(this);
-        this.handleAjaxFailure = this.handleAjaxFailure.bind(this);
+    //    this.handleAjaxFailure = this.handleAjaxFailure.bind(this);
     }
 
     componentDidMount() {
@@ -219,8 +219,8 @@ class Conversion extends React.Component {
 
     render() {
 
-        if (this.state.errorMsg) {
-            var errorMsg = <div className="errorMsg">{this.state.errorMsg}</div>
+        if (this.props.errorMsg) {
+            var errorMsg = <div className="errorMsg">{this.props.errorMsg}</div>
         }
 
         return (
@@ -263,7 +263,8 @@ export default connect((state, props) => {
         destinationAmount: state.amount.destinationAmount,
         conversionRate: state.amount.conversionRate,
         feeAmount: state.amount.feeAmount,
-        totalCost: state.amount.totalCost
+        totalCost: state.amount.totalCost,
+        errorMsg: state.error.errorMsg
     }
 
 })(Conversion);
