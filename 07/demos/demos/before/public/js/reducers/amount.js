@@ -1,6 +1,7 @@
 var defaultState = {
     originAmount: '0.00',
     originCurrency: 'USD',
+    destinationCurrency: 'EUR',
     destinationAmount: '0.00',
     conversionRate: 1.5,
              feeAmount: 0.00,
@@ -39,7 +40,12 @@ function amount(state = defaultState, action) {
             return {
                 ...state,
                 originCurrency: action.data
-            }             
+            }   
+        case "CHANGE_DESTINATION_CURRENCY":     
+            return {
+                ...state,
+                destinationCurrency: action.data
+            }                    
         default:
             return state
     }

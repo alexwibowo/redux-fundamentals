@@ -13,7 +13,7 @@ class Conversion extends React.Component {
             // originAmount: '0.00',
             // originCurrency: 'USD',
             // destinationAmount: '0.00',
-            destinationCurrency: 'EUR',
+            // destinationCurrency: 'EUR',
             feeAmount: 0.00,
             // conversionRate: 1.5,
             totalCost: 0.00,
@@ -24,7 +24,7 @@ class Conversion extends React.Component {
         this.handleOriginAmountChange = this.handleOriginAmountChange.bind(this);
         this.handleDestAmountChange = this.handleDestAmountChange.bind(this);
         this.handleOriginCurrencyChange = this.handleOriginCurrencyChange.bind(this);
-        this.handleDestCurrencyChange = this.handleCurrencyChange.bind(this, 'destination');
+        this.handleDestCurrencyChange = this.handleDestCurrencyChange.bind(this);
         this.handleAjaxFailure = this.handleAjaxFailure.bind(this);
     }
 
@@ -64,7 +64,7 @@ class Conversion extends React.Component {
         var payload = {
             originAmount: this.props.originAmount,
             originCurrency: newCurrency,
-            destCurrency: this.state.destinationCurrency,
+            destCurrency: this.props.destinationCurrency,
             calcOriginAmount: false
         }
 
@@ -73,7 +73,29 @@ class Conversion extends React.Component {
         var feePayload = {
             originAmount: this.props.originAmount,
             originCurrency: newCurrency,
-            destCurrency: this.state.destinationCurrency
+            destCurrency: this.props.destinationCurrency
+        }
+
+        this.props.dispatch(actions.fetchFees(feePayload));
+    }
+
+    handleDestCurrencyChange(event){
+        const newCurrency = event.target.value;
+        this.props.dispatch(actions.changeDestinationCurrency(newCurrency))
+     
+        var payload = {
+            originAmount: this.props.originAmount,
+            originCurrency: this.props.originCurrency,
+            destCurrency: newCurrency,
+            calcOriginAmount: false
+        }
+
+        this.props.dispatch(actions.fetchConversionRate(payload));
+
+        var feePayload = {
+            originAmount: this.props.originAmount,
+            originCurrency: this.props.originCurrency,
+            destCurrency: newCurrency
         }
 
         this.props.dispatch(actions.fetchFees(feePayload));
@@ -106,7 +128,7 @@ class Conversion extends React.Component {
                 this.makeFeeAjaxCall({
                     originAmount: resp.originAmount,
                     originCurrency: this.props.originCurrency,
-                    destCurrency: this.state.destinationCurrency
+                    destCurrency: this.props.destinationCurrency
 
                 }, (response) => {
                     this.setState({
@@ -134,7 +156,7 @@ class Conversion extends React.Component {
         var payload = {
             originAmount: newAmount,
             originCurrency: this.props.originCurrency,
-            destCurrency: this.state.destinationCurrency,
+            destCurrency: this.props.destinationCurrency,
             calcOriginAmount: false
         }
 
@@ -143,7 +165,7 @@ class Conversion extends React.Component {
         var feePayload = {
             originAmount: newAmount,
             originCurrency: this.props.originCurrency,
-            destCurrency: this.state.destinationCurrency
+            destCurrency: this.props.destinationCurrency
         }
 
         this.props.dispatch(actions.fetchFees(feePayload));
@@ -174,7 +196,7 @@ class Conversion extends React.Component {
             this.makeFeeAjaxCall({
                 originAmount: resp.originAmount,
                 originCurrency: this.props.originCurrency,
-                destCurrency: this.state.destinationCurrency
+                destCurrency: this.props.destinationCurrency
 
             }, (resp) => {
                 this.setState({
@@ -189,7 +211,7 @@ class Conversion extends React.Component {
     // this is debounced in `componentDidMount()` as this.makeConversionAjaxCall()
     _makeConversionAjaxCall(data, successCallback, failureCallback) {
         var originCurrency = this.props.originCurrency;
-        var destCurrency = this.state.destinationCurrency;
+        var destCurrency = this.props.destinationCurrency;
 
         var payload = {
             originAmount: data.newValue || this.props.originAmount,
@@ -247,7 +269,7 @@ class Conversion extends React.Component {
                     <option value="JPY">JPY</option>
                 </select>
                 to <input className="amount-field" onChange={this.handleDestAmountChange} value={this.props.destinationAmount} />&nbsp;
-                <select value={this.state.destinationCurrency} onChange={this.handleDestCurrencyChange}>
+                <select value={this.props.destinationCurrency} onChange={this.handleDestCurrencyChange}>
                     <option value="USD">USD</option>
                     <option value="EUR">EUR</option>
                     <option value="JPY">JPY</option>
@@ -257,7 +279,7 @@ class Conversion extends React.Component {
                 <br/><br/><br/>
                 <FeesTable
                     originCurrency={this.props.originCurrency}
-                    destinationCurrency={this.state.destinationCurrency}
+                    destinationCurrency={this.props.destinationCurrency}
                     conversionRate={this.props.conversionRate}
                     fee={this.props.feeAmount}
                     total={this.props.totalCost}
@@ -272,6 +294,7 @@ export default connect((state, props) => {
     return {
         originAmount: state.amount.originAmount,
         originCurrency: state.amount.originCurrency,
+        destinationCurrency: state.amount.destinationCurrency,
         destinationAmount: state.amount.destinationAmount,
         conversionRate: state.amount.conversionRate,
         feeAmount: state.amount.feeAmount,
