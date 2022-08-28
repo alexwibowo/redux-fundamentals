@@ -188,15 +188,15 @@ class Conversion extends React.Component {
             calcOriginAmount: true
         }
 
-        this.props.dispatch(actions.fetchConversionRate(payload));
+        this.props.dispatch(actions.fetchConversionRateAndFees(payload));
 
-        var feePayload = {
-            originAmount: newAmount,
-            originCurrency: this.props.originCurrency,
-            destCurrency: this.props.destinationCurrency
-        }
+        // var feePayload = {
+        //     originAmount: newAmount,
+        //     originCurrency: this.props.originCurrency,
+        //     destCurrency: this.props.destinationCurrency
+        // }
 
-        this.props.dispatch(actions.fetchFees(feePayload));
+        // this.props.dispatch(actions.fetchFees(feePayload));
 
     }
 

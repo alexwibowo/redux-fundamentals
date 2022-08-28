@@ -31,6 +31,36 @@ export function changeDestinationCurrency(newCurrency){
   }
 }
 
+export function fetchConversionRateAndFees(payload) {
+  return (dispatch) => {
+    makeConversionAndFeesAjaxCall(payload, dispatch);
+  }
+}
+
+function _makeConversionAndFeesAjaxCall(payload, dispatch) {
+  dispatch({type:"REQUEST_CONVERSION_RATE", data: payload});
+
+  // ajax call for destination amount
+  axios.get('/api/conversion', {
+      params: payload
+  })
+  .then((resp) => {
+    dispatch({type:"RECEIVED_CONVERSION_RATE_SUCCESS", data: resp.data});
+
+    // chaining call to fetch fees
+    const feePayload = {
+      ...payload,
+      originAmount: resp.data.originAmount
+    } 
+    dispatch(fetchFees(feePayload));
+  })
+  .catch((err) => {
+    dispatch({type:"RECEIVED_CONVERSION_RATE_FAILURE", data: err});
+  });
+}
+
+var makeConversionAndFeesAjaxCall = debounce(_makeConversionAndFeesAjaxCall, 300);
+
 
 export function fetchConversionRate(payload) {
   return (dispatch) => {
