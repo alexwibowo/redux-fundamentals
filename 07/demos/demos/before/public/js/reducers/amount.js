@@ -1,3 +1,5 @@
+import { ActionTypes as types } from "../constants";
+
 var defaultState = {
     originAmount: '0.00',
     originCurrency: 'USD',
@@ -11,30 +13,30 @@ var defaultState = {
 
 function amount(state = defaultState, action) {
     switch (action.type){
-        case 'CHANGE_ORIGIN_AMOUNT':
+        case types.CHANGE_ORIGIN_AMOUNT:
             return {
                 ...state,
                 originAmount: action.data.newAmount
             }
-        case 'CHANGE_DESTINATION_AMOUNT':
+        case types.CHANGE_DESTINATION_AMOUNT:
             return {
                 ...state,
                 destinationAmount: action.data.newAmount
             }
-        case 'RECEIVED_CONVERSION_RATE':
+        case types.RECEIVED_CONVERSION_RATE:
             return {
                 ...state,
                 conversionRate: action.data.xRate,
                 destinationAmount: action.data.destAmount
             }
-        case 'RECEIVED_CONVERSION_RATE_SUCCESS':
+        case types.RECEIVED_CONVERSION_RATE_SUCCESS:
             return {
                 ...state,                
                 originAmount: action.data.originAmount,
                 conversionRate: action.data.xRate,
                 destinationAmount: action.data.destAmount
             }
-        case "RECEIVED_FEES_SUCCESS":
+        case types.RECEIVED_FEES_SUCCESS:
             const newFeeAmount = action.data.feeAmount;
             const newTotal = parseFloat(state.originAmount, 10) + parseFloat(newFeeAmount, 10);
             return {
@@ -42,12 +44,12 @@ function amount(state = defaultState, action) {
                 feeAmount: newFeeAmount,
                 totalCost: newTotal
             }   
-        case "CHANGE_ORIGIN_CURRENCY": 
+        case types.CHANGE_ORIGIN_CURRENCY: 
             return {
                 ...state,
                 originCurrency: action.data
             }   
-        case "CHANGE_DESTINATION_CURRENCY":     
+        case types.CHANGE_DESTINATION_CURRENCY:     
             return {
                 ...state,
                 destinationCurrency: action.data
