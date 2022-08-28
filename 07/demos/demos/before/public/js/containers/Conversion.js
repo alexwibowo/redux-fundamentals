@@ -171,7 +171,37 @@ class Conversion extends React.Component {
         this.props.dispatch(actions.fetchFees(feePayload));
 
     }
+
     handleDestAmountChange(event) {
+        var newAmount = event.target.value;
+
+        // remove unallowed chars
+        newAmount = newAmount.replace(',','')
+
+        // optimistic field updates
+        this.props.dispatch(actions.changeDestAmount(newAmount));
+
+        var payload = {
+            destAmount: newAmount,
+            originCurrency: this.props.originCurrency,
+            destCurrency: this.props.destinationCurrency,
+            calcOriginAmount: true
+        }
+
+        this.props.dispatch(actions.fetchConversionRate(payload));
+
+        var feePayload = {
+            originAmount: newAmount,
+            originCurrency: this.props.originCurrency,
+            destCurrency: this.props.destinationCurrency
+        }
+
+        this.props.dispatch(actions.fetchFees(feePayload));
+
+    }
+
+
+    handleDestAmount2Change(event) {
         var newAmount = event.target.value;
 
         // remove unallowed chars

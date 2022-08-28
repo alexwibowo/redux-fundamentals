@@ -10,6 +10,13 @@ export function changeOriginAmount(newAmount) {
   }
 }
 
+export function changeDestAmount(newAmount){
+  return {
+    type: 'CHANGE_DESTINATION_AMOUNT',
+    data: {newAmount: newAmount}
+  }
+}
+
 export function changeOriginCurrency(newCurrency){
   return {
     type:'CHANGE_ORIGIN_CURRENCY',
