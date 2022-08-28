@@ -12,37 +12,36 @@ var defaultState = {
 
 
 function amount(state = defaultState, action) {
-    if (action.type === 'CHANGE_ORIGIN_AMOUNT') {
-        return {
-            ...state,
-            originAmount: action.data.newAmount
-        }
-    } else if (action.type === 'RECEIVED_CONVERSION_RATE'){
-        return {
-            ...state,
-            conversionRate: action.data.xRate,
-            destinationAmount: action.data.destAmount
-        }
-    } else if (action.type === 'RECEIVED_CONVERSION_RATE_SUCCESS'){
-        return {
-            ...state,
-            conversionRate: action.data.xRate,
-            destinationAmount: action.data.destAmount
-        }
-    } else if (action.type === "RECEIVED_FEES_SUCCESS"){
-        const newFeeAmount = action.data.feeAmount;
-        const newTotal = parseFloat(state.originAmount, 10) + parseFloat(newFeeAmount, 10);
-        return {
-            ...state,
-            feeAmount: newFeeAmount,
-            totalCost: newTotal
-        }
-        // this.calcNewTotal();
+    switch (action.type){
+        case 'CHANGE_ORIGIN_AMOUNT':
+            return {
+                ...state,
+                originAmount: action.data.newAmount
+            }
+        case 'RECEIVED_CONVERSION_RATE':
+            return {
+                ...state,
+                conversionRate: action.data.xRate,
+                destinationAmount: action.data.destAmount
+            }
+        case 'RECEIVED_CONVERSION_RATE_SUCCESS':
+            return {
+                ...state,
+                conversionRate: action.data.xRate,
+                destinationAmount: action.data.destAmount
+            }
+        case "RECEIVED_FEES_SUCCESS":
+            const newFeeAmount = action.data.feeAmount;
+            const newTotal = parseFloat(state.originAmount, 10) + parseFloat(newFeeAmount, 10);
+            return {
+                ...state,
+                feeAmount: newFeeAmount,
+                totalCost: newTotal
+            }                
+        default:
+            return state
     }
 
-
-
-    return state;
 }
 
 var logger = createLogger({
