@@ -1,3 +1,7 @@
-export var ActionTypes = {
-    CHANGE_ORIGIN_AMOUNT: "CHANGE_ORIGIN_AMOUNT"
-}
+import keyMirror from 'keymirror';
+
+export var ActionTypes = keyMirror({
+    CHANGE_ORIGIN_AMOUNT: null
+})
+
+console.log("Action Types", ActionTypes);
